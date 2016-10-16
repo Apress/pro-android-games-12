@@ -1,0 +1,26 @@
+CC = i686-pc-linux-gnu-gcc
+AR = i686-pc-linux-gnu-ar
+
+CFLAGS 	= -DPALM -IGL
+LFLAGS 	= rv
+
+#-shared 
+
+OBJ = nanoWrap.o eglwrap.o nanogl.o 
+#OBJ 	=  glwrap.o 
+
+#-lGLES_CM
+all: $(OBJ)
+	$(AR) $(LFLAGS) libNanoGL.a $(OBJ) 
+
+.c.o:
+	@echo
+	$(CC) -fpic -c $(CFLAGS) $<
+	
+.cpp.o:
+	@echo
+	$(CC) -fpic -c $(CFLAGS) $<
+
+
+clean:
+	rm *.o 

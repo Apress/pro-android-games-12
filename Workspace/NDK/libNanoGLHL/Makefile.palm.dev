@@ -1,0 +1,40 @@
+include ../MAKE/palm.mk
+
+#CC = i686-pc-linux-gnu-gcc
+#AR = i686-pc-linux-gnu-ar
+CC = arm-none-linux-gnueabi-gcc
+AR = arm-none-linux-gnueabi-ar
+
+CFLAGS 	= -DPALM -DNGL_HL -INGL $(PALM_INCLUDE) -Iglu
+LFLAGS 	= rv
+
+LDFLAGS = -Wl,--allow-shlib-undefined
+
+
+OBJ = nanoWrap.o nanogl.o \
+# glu/glues_mipmap.o \
+# glu/glu_rip.o \
+ 
+#OBJ 	=   eglwrap.o glwrap.o 
+
+TOBJ = test/testNano.o
+
+#-lGLES_CM
+
+all: $(OBJ)
+	$(AR) $(LFLAGS) libNanoGL.a $(OBJ) 
+
+test: $(TOBJ)
+	$(CC) $(LDFLAGS) -o testngl  $(TOBJ) libNanoGL.a $(PALM_LIB) -lGLES_CM
+	
+%.o : %.c
+	@echo
+	$(CC) -fpic $(CFLAGS) -o $@ -c $<
+	
+.cpp.o:
+	@echo
+	$(CC) -fpic $(CFLAGS) -o $@ -c $<
+
+
+clean:
+	rm *.o test/*.o
